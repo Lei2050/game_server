@@ -1,0 +1,46 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+
+message CS_HeroDraw {
+    optional uint32 type = 1; //0-单抽，1-十连抽
+}
+
+message SC_HeroDraw {
+    optional int32 placeholder = 1; //占坑
+}
+
+message CS_HeroLevelUp {
+    optional uint64 hero_id = 1;
+}
+
+message SC_HeroLevelUp {
+    optional int32 placeholder = 1; //占坑
+}
+
+message CS_HeroStarUp {
+    optional uint64 hero_id = 1;
+}
+
+message SC_HeroStarUp {
+    optional int32 placeholder = 1; //占坑
+}
+
+message CS_HeroList {
+    optional int32 placeholder = 1; //占坑
+}
+
+message Hero {
+    optional uint64 id = 1;
+    optional int64 data_id = 2;
+    optional uint32 level = 3;
+    optional uint32 star = 4;
+    optional uint32 star_stage = 5;
+}
+
+message SC_HeroList {
+    repeated Hero heros = 1;
+}

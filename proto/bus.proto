@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+//message BusRegisterRequest {
+//    optional uint32 id = 1;
+//}
+//
+//message BusRegisterResponse {
+//    optional uint32 id = 1;
+//}
+//
+//message HeartBeatRequest {}
+//
+//message HeartBeatResponse {}

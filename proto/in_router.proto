@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+message RouterReportInfo {
+    optional float cpu_rate = 1; //cpu使用率
+    optional float mem_rate = 2; //内存使用率，先不考虑虚拟内存
+}
+
+message RouterNodeReport {
+    optional uint32 bus_id = 1;
+    optional RouterReportInfo info = 2;
+}
+
+enum RouterChooseType {
+    RANDOM = 1;       //随机选择
+    LOWEST_LOAD = 2;  //负载最低
+    HIGHEST_LOAD = 3; //负载最高
+}
+
+//对于有多个进程实例的app_type，需要选择其中一个进行业务。
+//比如申请副本时，需要选择一个战斗服进行战斗。
+message RouterChooseRequest {
+    optional RouterChooseType type = 1 [default = LOWEST_LOAD];
+    optional uint32 cmd = 2; //发起请求的是哪个指令
+}
+
+message RouterChooseResponse {
+    optional uint32 bus_id = 1;
+    optional uint32 cmd = 2; //发起请求的是哪个指令，用来判断后续逻辑
+}

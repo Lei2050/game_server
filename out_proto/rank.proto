@@ -1,0 +1,43 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message CS_GetRankList {
+    optional uint32 rank_id = 1;
+}
+
+message SC_GetRankList {
+    optional uint32 rank_id = 1;
+    repeated RankInfo list = 2;
+    optional uint32 ranking = 3; //排名  为0，表示未上榜
+    optional uint32 score = 4; //排行榜积分
+}
+
+message RankInfo {
+    optional uint64 uid = 1;
+    optional uint32 score = 2;
+}
+
+//排行榜点赞
+message CS_RankLike {
+    optional uint32 rank_id = 1;
+    optional uint32 rank = 2; //点赞的排行 （前3选一）
+}
+
+message RankUserInfo {
+    optional uint64 uid = 1; // uid
+    optional string name = 2; // 玩家名字
+    optional uint32 head = 3; // 头像
+}
+
+message TowerRankInfo {
+    optional RankUserInfo info = 1;
+    optional float layer = 2;
+    optional int32 rank = 3;
+    optional uint32 like = 4;
+}
+
+
+

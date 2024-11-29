@@ -1,0 +1,64 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+//获取公会列表
+message GuildSync {
+    repeated InGuildInfo List = 1;
+    optional string operate = 2;
+    optional uint64 playerId = 3; // 操作的uid , 审核通过、踢掉等
+}
+
+message InGuildInfo {
+    optional uint64 Id  = 1;
+    optional string Name = 2;
+    optional uint64 Leader = 3;
+    optional uint32 Level  = 4;
+    repeated uint64 member = 5; //成员
+    repeated uint64 apply = 6; //加入申请
+    optional string message = 7; //公会公告
+}
+
+//创建公会 client -> game -> guild -> sync
+message GuildCreate {
+    optional string name = 1; //公会名字
+    optional uint64 leader = 2; //会长uid
+}
+
+//解散公会 client -> game -> guild -> sync
+message GuildDismiss {
+    optional uint64 guild_id = 1;
+}
+
+//申请加入公会 client -> game -> guild -> game(leader)
+message GuildApplyJoin {
+    optional uint64 guild_id = 1;
+    optional uint64 applier = 2; //申请加入的player uid
+}
+
+//公会加入申请审核 client -> game -> guild -> （通过）sync + apply zone
+message GuildApplyCheck{
+    optional uint64 guild_id = 1;
+    optional uint64 applier = 2; //加入的玩家uid
+    optional uint32 accept = 3; //审核是否通过 1 通过 0 未通过
+}
+
+//退会 client -> game（删除user.guild） -> guild -> sync
+message GuildLeave {
+    optional uint64 guild_id = 1;
+    optional uint64 player_id = 2;
+}
+
+//踢人 client -> game -> guild -> game(player的zone) -> sync
+message GuildKick {
+    optional uint64 guild_id = 1;
+    optional uint64 player_id = 2;
+}
+
+//修改公告 client -> game -> guild -> sync
+message GuildMessage {
+    optional uint64 guild_id = 1;
+    optional string message = 2;
+}

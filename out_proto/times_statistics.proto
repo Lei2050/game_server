@@ -1,0 +1,11 @@
+syntax="proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message SC_TimeStatisticsNotify{
+    optional int32 id = 1;
+    optional uint32 count = 2;
+}
+

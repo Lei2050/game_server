@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+
+message SC_ErrResponse {
+    optional int32 ret = 1; // 错误id
+}
+
+

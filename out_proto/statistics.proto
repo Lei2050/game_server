@@ -1,0 +1,12 @@
+syntax="proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message SC_StatisticsList{
+    optional uint32 career_draw_num = 1;  // 生涯抽卡次数
+    optional uint32 draw_orange_num = 2; // 获得橙卡次数
+    optional uint32 draw_guaranteed_schedule = 3; //抽卡保底进度
+}
+

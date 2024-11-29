@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+// 排行榜插入
+message RankInsert {
+    optional uint32 rank_id = 1;
+    optional string rank_key = 2; // 排行榜key 由排行榜id和zone_id组成
+    optional string element = 3; // 插入的元素
+}
+
+//排行榜同步
+message RankSync {
+    repeated RankSyncInfo ranks = 1;
+    optional int32 load = 2; //是否为load
+}
+
+message RankSyncInfo {
+    optional uint32 rank_id = 1;
+    optional string rank_key = 2;
+    repeated string rank_list = 3;
+    optional bool done = 4; //是否全部同步完毕
+}

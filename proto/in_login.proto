@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+import "login.proto";
+
+message Kickoff {
+    optional KickoffReason reason = 1;
+    optional uint32 gw_id = 2; //网关的连接id
+}
+
+//网关的客户端连接断开
+message GatewayConnClose {}

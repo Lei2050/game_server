@@ -1,0 +1,51 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package="am/protocol/out";
+
+//拉取好友列表
+message CS_GetFriendList {
+    optional uint32 placeholder = 1;
+}
+
+message SC_GetFriendList {
+    repeated uint64 friends = 1;
+    repeated uint64 black_list = 2;
+    repeated uint64 apply = 3;
+}
+
+//获取推荐好友列表 game -> game_router -> 发送到同区的game -> 返回
+message CS_FriendRecommend {
+    optional uint32 placeholder = 1;
+}
+
+message SC_FriendRecommend {
+    repeated uint64 player_ids = 1;
+}
+
+//好友查找
+message CS_FriendSearch {
+    optional string name = 1;
+}
+
+message SC_FriendSearch {
+    optional uint64 player_id = 2;
+}
+
+//好友申请
+message CS_FriendApply {
+    optional uint64 player_id = 1;
+}
+
+//好友申请处理
+message CS_FriendApplyHandle {
+    optional uint64 player_id = 1;
+    optional uint32 accept = 2; //1 同意 2 拒绝
+}
+
+//添加黑名单
+message CS_AddBalckList {
+    optional uint64 player_id = 1;
+}
+

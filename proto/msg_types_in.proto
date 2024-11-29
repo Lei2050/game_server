@@ -1,0 +1,75 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+import "in_login.proto";
+import "in_rank.proto";
+import "gm.proto";
+import "in_battle.proto";
+import "in_router.proto";
+import "in_guild.proto";
+import "in_friend.proto";
+
+// 所有服务器内部的消息，跟客户端无关。
+// 逻辑层协议号范围(300000, 399999]，如果超过这个范围，请报风险。
+// [0x12345600, 0x12345605]范围请不要用，已经被服务器底层占用。
+message InMessage {
+    oneof one_of {
+        //底层协议 - start
+        //BusRegisterRequest  bus_register_request = 1;
+        //BusRegisterResponse bus_register_response = 2;
+        //HeartBeatRequest  heart_beat_request = 3;
+        //HeartBeatResponse heart_beat_response = 4;
+        //底层协议 -  end 
+
+        //上层协议 - start
+
+        //非业务层协议 - start
+        Kickoff kickoff = 1001;
+        GatewayConnClose gateway_conn_close = 1002;
+        //非业务层协议 -  end
+
+
+        // 业务层协议 - start
+        //排行榜
+        RankInsert rank_insert = 300001;
+        RankSync rank_sync = 300002;
+
+        //gm
+        GmAddResource gm_add_resource = 300011;
+
+        //公会
+        GuildSync guild_sync = 300021;
+        GuildCreate guild_create = 300022;
+        GuildDismiss guild_dismiss = 300023;
+        GuildApplyJoin guild_apply_join = 300024;
+        GuildApplyCheck guild_apply_check = 300025;
+        GuildLeave guild_leave = 300026;
+        GuildKick guild_kick = 300027;
+        GuildMessage guild_message = 300028;
+
+        //好友系统
+        G2R_FriendRecommend g2r_friend_recommend = 300031;
+        R2G_FriendRecommend r2g_friend_recommend = 300032;
+        FriendSearchReq friend_search_req = 300033;
+        FriendSearchRes friend_search_res = 300034;
+        FriendCheck friend_check = 300035;
+        FriendCheckRes friend_check_res = 300036;
+
+
+        //router相关
+        RouterNodeReport router_node_report = 300101;
+        RouterChooseRequest  router_choose_request  = 300102;
+        RouterChooseResponse router_choose_response = 300103;
+
+        //380000以上协议留给战斗用
+        SB_TakeRoom sb_take_room = 380001;
+        BS_TakeRoom bs_take_room = 380002;
+        // 业务层协议 - end
+
+        //上层协议 -  end
+
+    }
+}

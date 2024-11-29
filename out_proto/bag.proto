@@ -1,0 +1,74 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+import "hero.proto";
+
+message Item {
+    optional uint64 id = 1;
+    optional int32 num = 2;
+}
+
+message Equip {
+    optional uint64 equipId = 1; //装备的唯一id
+    optional uint64 item = 2; //对应的道具id
+    optional uint32 level = 3; //养成相关 待定
+    optional uint32 star = 4; //养成相关 待定
+}
+
+message SC_ResourceList {
+    repeated Item resource = 1;
+}
+
+//背包列表
+message CS_BagList {
+    optional uint32 placeholder = 1; //占坑
+}
+
+message SC_BagList {
+    repeated Item items = 1;
+    repeated Equip equips = 2;
+    optional uint32 expand_num = 3; // 扩容次数
+    optional uint32 capacity = 4; // 背包格子
+}
+
+
+// 背包扩容
+message CS_ExpandBag {
+    optional uint32 num = 1; //扩容次数
+}
+
+message SC_ExpandBag {
+   optional int32 placeholder = 1; //占坑
+}
+
+//使用单选宝箱
+message CS_UseSinglePickBox {
+    optional uint64 id = 1;
+    optional uint32 num = 2;
+    repeated uint32 slots = 3; //选择的位置
+}
+
+message SC_UseSinglePickBox {
+    optional int32 placeholder = 1; //占坑
+}
+
+//出售道具
+message CS_SaleItem {
+    optional uint64 id = 1;
+    optional uint32 num = 2;
+}
+
+message SC_SaleItem {
+    optional int32 placeholder = 1; //占坑
+}
+
+//所有资源（货币类型、道具类型）增删，同步给前端
+message SC_ResourceNotify {
+    repeated Item resources = 1;
+    repeated Item items = 2;
+    repeated Equip equips = 3;
+    repeated Hero heros = 4;
+}

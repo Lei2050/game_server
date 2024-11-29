@@ -1,0 +1,57 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+
+// 获取邮件列表
+message CS_GetMailList {
+    optional int32 placeholder = 1;
+}
+
+message SC_GetMailList {
+    repeated MailInfo list = 1;
+}
+
+message MailInfo {
+    optional string title = 1;
+    optional string content = 2;
+    optional uint32 type = 3; //类型，1 普通邮件 2 公告邮件
+    optional uint32 status = 4; //状态 1 未读 2 已读未领取 3 已读已领取
+    repeated MailAnnex annexs = 5; // 附件
+    optional int64 send_time = 6;
+    optional int64 expire_time = 7; //过期时间
+    optional uint64 id = 8; //唯一id
+}
+
+// 邮件附件
+message MailAnnex {
+    optional uint32 type = 1;
+    optional uint64 value = 2;
+    optional int32 size = 3;
+}
+
+//读取邮件
+message CS_ReadMail {
+    optional uint64 id = 1;
+}
+
+//领取邮件
+message CS_ReceiveMail {
+    optional uint64 id = 1;
+}
+
+//删除邮件
+message CS_DeleteMail {
+    optional uint64 id = 1;  // id 为0，表示一键删除
+}
+
+// 新邮件同步
+message SC_MailNotify {
+    optional MailInfo new_mail = 1;
+}
+
+
+
+

@@ -1,0 +1,109 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+import "login.proto";
+import "hero.proto";
+import "bag.proto";
+import "draw.proto";
+import "rank.proto";
+import "mail.proto";
+import "shop.proto";
+import "tower.proto";
+import "battle.proto";
+import "guild.proto";
+import "friend.proto";
+
+// 所有客户端->服务器的消息类型
+// (100+模块号)*1000 + 递增号
+// 比如下面登陆，登陆模块号为1
+// 协议号范围 (100000, 299999]，如果超出这个范围，请报风险 
+// 注意：在客户端，1**开头的是C#端协议，2**开头的是Lua端协议。
+message CSMessage {
+    //oneof one_of {
+
+    //登陆相关 101
+    optional CS_Login cs_login = 101001;
+    optional CS_Create cs_create = 101002;
+    optional CS_Gm cs_gm = 101004;
+    optional CS_Ready cs_ready = 101005;
+
+    //角色系统 102
+    optional CS_HeroDraw cs_hero_draw = 102001;
+    optional CS_HeroLevelUp cs_hero_level_up = 102002;
+    optional CS_HeroStarUp cs_hero_star_up = 102003;
+    optional CS_HeroList cs_hero_list = 102004;
+
+    //背包道具相关 103
+    optional CS_BagList cs_bag_list = 103001;
+    optional CS_ExpandBag cs_expand_bag = 103002;
+    optional CS_UseSinglePickBox cs_use_singlepickbox = 103003;
+    optional CS_SaleItem cs_sale_item = 103004;
+
+    //抽卡系统 104
+    optional CS_Draw cs_draw = 104001;
+    optional CS_DrawReward cs_draw_reward = 104002;
+
+    //排行榜系统 105
+    optional CS_GetRankList cs_rank_list = 105001;
+    optional CS_RankLike cs_rank_like = 105002;
+
+    //邮件系统 106
+    optional CS_GetMailList cs_mail_list = 106001;
+    optional CS_ReadMail cs_read_mail = 106002;
+    optional CS_ReceiveMail cs_receive_mail = 106003;
+    optional CS_DeleteMail cs_delete_mail = 106004;
+
+    //商店系统 107
+    optional CS_GetShop cs_get_shop = 107001;
+    optional CS_ShopBuy cs_shop_buy = 107002;
+    optional CS_RefreshShop cs_shop_refresh = 107003;
+
+    //爬塔系统 108
+    optional CS_TowerFight cs_tower_fight = 108001;
+    optional CS_TowerLike cs_tower_like = 108002;
+
+    //公会系统 109
+    optional CS_GuildCreate cs_guild_create = 109001;
+    optional CS_GuildDismiss cs_guild_dismiss = 109002;
+    optional CS_GuildApplyJoin cs_guild_apply_join = 109003;
+    optional CS_GuildApplyCheck cs_guild_apply_check = 109004;
+    optional CS_GuildLeave cs_guild_leave = 109005;
+    optional CS_GuildKick cs_guild_kick = 109006;
+    optional CS_GuildMessage cs_guild_message = 109007;
+    optional CS_GetGuildList cs_get_guildlist = 109008;
+
+    //好友系统 110
+    optional CS_GetFriendList cs_get_friendlist = 110001;
+    optional CS_FriendRecommend cs_friend_recommend = 110002;
+    optional CS_FriendSearch cs_friend_search = 110003;
+    optional CS_FriendApply cs_friend_apply = 110004;
+    optional CS_FriendApplyHandle cs_friend_apply_handle = 110005;
+    optional CS_AddBalckList cs_add_blacklist = 110006;
+
+
+
+    //战斗系统
+    optional CS_BattleHeartBeat cs_battle_heart_beat = 150000;
+    optional CS_EnterStage cs_enter_stage = 150001;
+    optional CS_BattleLogin cs_battle_login = 150002;
+    optional CS_BattleReady cs_battle_ready = 150003;
+    optional CS_BattleGm cs_battle_gm = 150004;
+    optional CS_Move cs_move = 150005;
+    optional CS_QuickTakeRoom cs_quick_take_room = 150009;
+    optional CS_CollectionResource cs_collection_resource = 150010;
+    optional CS_CastSkill cs_cast_skill = 150016;
+    optional CS_SyncDamage cs_sync_damage = 150017;
+    optional CS_ReloadGun cs_reload_gun = 150018;
+    optional CS_ShiftGun cs_shift_gun = 150020;
+    optional CS_StopMove cs_stop_move = 150021;
+    optional CS_StageRestart cs_stage_restart = 150022;
+    optional CS_PickAbility cs_pick_ability = 150035;
+    optional CS_TaskList cs_task_list = 150036;
+    optional CS_ShotMove cs_shot_move = 150038;
+    optional CS_EnterScene cs_enter_scene = 150040;
+    optional CS_SkillCastOnPos cs_skill_cast_on_pos = 150041;
+
+}

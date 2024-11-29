@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+// 获取爬塔信息
+message SC_GetTowerInfo {
+    optional uint32 layer = 1; // 完成层数
+}
+
+// 爬塔战斗
+message CS_TowerFight {
+    optional uint32 layer = 1; // 挑战层数
+}
+
+message SC_TowerFight {
+    optional bool success = 1; // 挑战是否成功
+}
+
+// 爬塔排行榜点赞
+message CS_TowerLike {
+    optional uint32 rank = 1; // 点赞的排名
+}
+
+
+
+
+
+
+

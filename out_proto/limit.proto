@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message SC_LimitList {
+    repeated UsedItem used_item = 1;
+    repeated ShopBuy shop_buy = 2;
+    repeated ShopRefresh shop_refresh = 3;
+}
+
+message UsedItem {
+    optional uint64 item_id = 1;
+    optional uint32 num = 2;
+}
+
+message ShopBuy {
+    optional uint64 shop_id = 1;
+    repeated ShopBuyGood goods = 2;
+}
+
+message ShopBuyGood {
+    optional uint64 good_id = 1;
+    optional uint32 num = 2;
+}
+
+message ShopRefresh {
+    optional uint64 shop_id = 1;
+    optional uint32 num = 2;
+}

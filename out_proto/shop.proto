@@ -1,0 +1,33 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message ShopInfo {
+    optional int64 shop_id = 1;
+    repeated int64 goods = 2; // 商品id
+}
+
+//拉取商店
+message CS_GetShop {
+    optional int64 shop_id = 1; // 0 表示所有shop
+}
+
+message SC_GetShop {
+    repeated ShopInfo shops = 1;
+}
+
+
+
+//商店购买
+message CS_ShopBuy {
+     optional int64 shop_id = 1;
+     optional int64 good_id = 2;
+     optional uint32 num = 3;
+}
+
+//刷新商店
+message CS_RefreshShop {
+    optional int64 shop_id = 1;
+}

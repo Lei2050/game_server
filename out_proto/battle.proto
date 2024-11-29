@@ -1,0 +1,545 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+//客户端与战斗服的心跳
+message CS_BattleHeartBeat {
+}
+
+message SC_BattleHeartBeat {
+}
+
+//请求进入战斗场景，请求打副本，
+message CS_EnterStage {
+    optional uint32 stage_id = 1;
+}
+message SC_EnterStage {
+    optional uint32 stage_id = 1;
+    optional string address = 2;
+}
+
+//登陆战斗服
+message CS_BattleLogin {
+    optional uint64 room_id = 1; //房间id
+    optional uint64 uid = 2;  //玩家id 
+    optional string pass = 3; //密码
+}
+//登陆战斗服
+message SC_BattleLogin {
+    optional uint64 room_id = 1; //房间id
+    optional uint64 uid = 2;  //玩家id 
+    optional string pass = 3; //密码
+}
+
+//加载完毕，可以开始关卡了
+message CS_BattleReady {
+    optional int32 placeholder = 1; //占坑
+}
+//客户端收到这个，就进入场景
+message SC_BattleReady {
+    optional int32 placeholder = 1; //占坑
+}
+
+message CS_BattleGm {
+    optional string str = 1;
+}
+message SC_BattleGm {
+    optional string str = 1; //输出结果
+}
+
+//位置坐标
+message Pos3D {
+    optional int32 x = 1;
+    optional int32 y = 2;
+    optional int32 z = 3;
+}
+//目前只是示例
+//移动
+message CS_Move {
+    optional uint64 unit_id = 1; //单位id
+    optional Pos3D p = 2;        //期望目标位置
+    optional uint64 num = 10; //编号，debug用
+}
+//服务器发出的移动指令
+message SC_Move {
+    optional uint64 unit_id = 1; //单位id
+    optional Pos3D p = 2;  //当前移动的目标位置
+    optional Pos3D p2 = 3; //如果已经到达了p，则继续往p2移动
+    optional int32 ms = 4; //移动到p1需要的时间
+    optional int32 ms2 = 5; //p1移动到p2需要的时间
+}
+
+enum UnitType {
+    HERO = 1; //英雄
+    MONSTER = 2; //怪物
+    RESOURCE = 3; //资源
+    RESOURCE_POINT = 4; //矿点
+    DROP_ITEM = 5; //掉落物
+}
+
+//掉落物
+message DropItemUnit {
+    optional int64 type = 1; //类型：2-道具，3-武器
+    optional int64 value = 2; //类型值：道具id、武器id
+    optional int64 size = 3; //数量
+}
+message UnitBaseInfo {
+    optional int64 hp = 1; //血量
+    optional int64 mana = 2; //蓝
+    optional int32 velocity = 3; //速率
+    optional Pos3D pos = 4; //位置
+    optional UnitType type = 5;
+    optional uint64 owner_id = 6; //被占领者
+    optional DropItemUnit drop_item = 7; // type == DROP_ITEM 时有效
+    optional string user_name = 8; //单位名称
+}
+
+//增加单位
+message SC_AddUnit {
+    optional int64 data_id = 1; //配置表中的id，如果是掉落物则为道具id
+    optional uint64 unit_id = 2; //单位id 
+    optional UnitBaseInfo info = 3;
+}
+
+//移除单位
+message SC_RemoveUnit {
+    optional uint64 unit_id = 1;
+}
+
+enum UnitAttrType {
+    Level = 0;
+	Hp = 1;  //生命
+	Atk = 2; //攻击
+	Def = 3; //防御
+	Hit = 4; //命中
+	Dodge = 5; //闪避
+	Crit = 6; //暴击
+	AntiCrit = 7; //抗暴
+	HpRatio = 8; //生命比例
+	AtkRatio = 9; //攻击比例
+	DefRatio = 10; //防御比例
+	HitRatio = 11; //命中比例
+	DodgeRatio = 12; //闪避比例
+	CritRatio = 13; //暴击比例
+	AntiCritRatio = 14; //抗暴比例
+	CritHurt = 15; //暴伤加成
+	MoveSpeed = 16; //移动速度
+	//HpRestore = 17; //生命回复
+	HitRate = 18; //初始命中率
+	DodgeRate = 19; //初始闪避率
+	CritRate = 20; //初始暴击率
+	AntiCritRate = 21; //初始抗暴率
+	DamageReduceRate = 22; //初始受到伤害减免率
+	MoveSpeedRatio = 23; //移动速度比例
+    Sight = 24; //视野
+    SightRatio = 25; //视野百分比
+	ShotMoveSpeed = 26; //射击移动速度
+	ShotMoveSpeedRatio = 27; //射击移动速度
+	DamageAddValue = 28; //增伤
+	DamageAddRatio = 29; //增伤比例
+	DamageReduce= 30; //减伤值
+	ExpUpRatio = 31; //经验提升百分比
+	HpBase = 32; //hp基础
+	UnitAttrMax = 33;
+}
+
+//枪械属性
+enum WeaponAttrType {
+    WeaponPalaceholder = 0;
+    WeaponHp = 1;  //生命上限值
+    WeaponHpRatio = 2; //生命比例
+    WeaponAtk = 3; //攻击
+    WeaponAtkRatio = 4; //攻击比例
+    WeaponDef = 5; //防御
+    WeaponDefRatio = 6; //防御比例
+    WeaponBulletTime = 7; //指定装备装弹时间间隔减少X毫秒
+    WeaponBulletCapacity = 8; //指定装备弹夹容量提升定值
+    WeaponBulletCapacityRatio = 9; //指定装备弹夹容量提升百分比
+    WeaponRecoilRemainTime = 10; //指定装备后坐力持续时间降低X毫秒
+    WeaponWeaponAttrMax = 11;
+}
+
+enum WeaponSkillAttrType {
+    WeaponSkillPalaceholder = 0;
+    WeaponSkillDamageRatio = 1; //伤害增加百分比
+    WeaponSkillWeaponSkillAttrMax = 2;
+}
+
+
+enum BuffAttrType {
+    BuffPalaceholder = 0;
+    BuffAddTime = 1;  //增加时间
+    BuffAddLayer = 2; //增加层数
+    BuffAdd = 3; //增加buff
+    BuffBuffAttrMax = 4;
+}
+
+
+enum DropAttrType {
+    DropPalaceholder = 0;
+    DropOneMoreDropRatio = 1;  //击杀目标后掉落包多掉落1次概率提升百分比
+    DropDropBoxIdRatio = 2; //开启宝箱时指定掉落包概率提升百分比
+    DropDropAttrMax = 3;
+}
+
+
+message UnitAttr {
+    optional UnitAttrType type = 1;
+    optional int64 value = 2;
+}
+
+//同步单位基础信息
+message SC_SyncUnitInfo {
+    optional uint64 unit_id = 1; //单位id 
+    optional UnitBaseInfo info = 2;
+    //repeated UnitAttr attrs = 3; //属性
+    repeated int64 attrs = 3; //属性
+    repeated WeaponAttr weapon_attr= 4; //枪械属性
+    repeated SkillAttr skill_attr = 5; //技能属性
+    repeated DropAttr drop_attr = 6; //掉落属性
+
+    optional UnitAttr useless = 100; //没用,但是别删
+    optional WeaponAttrType useless2 = 101; //同上
+    optional BuffAttrType useless4 = 102;
+    optional WeaponSkillAttrType useless3 = 103;
+    optional DropAttrType useless5 = 104;
+}
+
+message WeaponAttr {
+    optional uint64 weapon_id = 1;
+    repeated int64 attrs = 2;
+}
+
+message SkillAttr {
+    optional uint64 skill_id = 1;
+    repeated int64 attrs = 2;
+}
+
+message DropAttr {
+    optional uint64 box_id = 1;
+    repeated int64 attrs = 2;
+}
+
+/*
+测试说明，理论上，养成玩法和具体战斗不是在同一个服务器，在进入关卡之前服务器分配并告知战斗服。
+目前先直接连接固定的服务器。连接上后，加载场景，发送CS_QuickTakeRoom表示告知服务器快速进入场景。
+场景生成后，服务器会直接增加一个单位（会收到SC_AddUnit协议）。
+*/
+//与客户端联调用，快速开房
+message CS_QuickTakeRoom {
+    optional int32 placeholder = 1; //占坑
+}
+
+message SC_QuickTakeRoom {
+    optional uint32 ok = 1;
+}
+
+//可刷新的资源点也作为一种单位（unit）。
+//理论上，采集动作也是释放技能的一种，（这样也便于抽象）；
+//目前还没有技能系统，就直接写个明确协议吧。
+message CS_CollectionResource {
+    optional uint64 unit_id = 1; //执行采集的单位id
+    optional uint64 res_id = 2;  //采集资源的单位id
+}
+
+message SC_CollectionResource {
+    optional uint64 unit_id = 1; //执行采集的单位id
+    optional uint64 res_id = 2;  //采集资源的单位id
+    optional int64 type = 3;
+    optional int64 value = 4;
+    optional int64 size = 5;
+}
+
+enum UnitState {
+    IDLE = 1; //无所事事
+    WALKING = 2; //移动中
+	DEAD = 3; //死亡
+	DIZZY = 4; //眩晕
+	CASTING_SKILL = 5; //正在放技能
+    NEWBEE = 6; //无敌（牛逼）
+    IMMOBILIZED = 7; //定身
+	FORCE_MOVE = 8; //强制位移中，用于重装和滑冰
+	IMMU_BUFF = 9; //免疫所有buff
+    IN_BATTLE = 10; //进战状态，如果有这个状态，说明处于进战状态，否则处于脱战状态，目前只针对怪物
+    WARNING = 11; //警告，闪红光
+    WARNING_2 = 12; //警告，高频闪红光
+}
+
+message SC_StateChange {
+    optional uint64 unit_id = 1; //单位
+    //state未来应该是一个状态集合（按位检测），比如“移动中”和“正在释放技能”会一起存在。
+    //目前的话，就先代表一个状态吧：1-移动中，2-死亡，3-眩晕，4-释放技能(可被打断)，5-释放技能中(不可被打断)。
+    //因为采集资源也是释放技能，所以“采集资源中”也就是4。
+    repeated UnitState states = 2; //状态集合
+}
+
+//奖励信息
+message BigMapAward {
+    optional int64 type = 1;  //奖励类型
+    optional int64 value = 2; //在配置表中的id
+    optional int64 size = 3;  //数量
+}
+
+//获得奖励、资源
+message SC_AwardsGet {
+    repeated BigMapAward awards = 1;
+}
+
+//告知客户端主控单位，临时协议，后面对接到养成系统的账号系统中去。
+message SC_MainUnit {
+    optional uint64 unit_id = 1;
+}
+
+//增加道具
+message SC_UnitAddItem {
+    optional uint64 unit_id = 1;
+    optional int64 item_id = 2;
+    optional int64 item_num = 3; // 增加/减少数量
+    optional int64 num = 4; //当前数量
+    optional ItemReason reason = 5;
+}
+
+enum ItemReason {
+    System = 0; //系统发的
+    Gm = 1; //作弊获得
+    Resource = 2; //采集资源
+    Drop = 3; //采集掉落物
+}
+
+//同步道具数量
+message SC_UnitSyncItem {
+    optional uint64 unit_id = 1;
+    optional int64 item_id = 2;
+    optional int64 item_num = 3;
+}
+
+//释放技能
+message CS_CastSkill {
+    optional uint64 unit_id = 1; //释放技能的单位
+    optional int64 skill_id = 2; //技能id
+    //optional uint64 target_id = 3; //目标 - 如果没有目标则不传 
+    optional Pos3D target_pos = 4; //目标位置 - 如果没有目标位置则不传
+    optional Pos3D orientation = 5; //释放技能时的朝向，用于后坐力相关
+}
+
+//释放技能同步，目前直接广播
+message SC_CastSkill {
+    optional uint64 unit_id = 1; //释放技能的单位
+    optional int64 skill_id = 2; //技能id
+    optional uint64 target_id = 3; //目标 - 如果没有目标则不传 
+    optional Pos3D target_pos = 4; //目标位置 - 如果没有目标位置则不传
+    optional Pos3D orientation = 5; //释放技能时的朝向，用于后坐力相关
+}
+
+//伤害状态
+enum DamageStatus {
+    DamageStatusCrit = 1;
+}
+
+//伤害同步
+message DamageInfo {
+    optional uint64 unit_id = 1; //遭受伤害的单位
+    optional uint64 src_unit_id = 2; //伤害来源单位
+    optional int64 skill_id = 3; //伤害来源技能
+    optional int64 damage = 4; //伤害量
+    optional int64 hp = 5; //目标当前血量
+    optional int64 buff_id = 6; //伤害来源buff
+    repeated int64 status = 7; //状态 暴击等
+}
+
+message CS_SyncDamage {
+    repeated DamageInfo infos = 1;
+}
+
+message SC_SyncDamage {
+    repeated DamageInfo infos = 1;
+}
+
+//装填弹夹
+message CS_ReloadGun {
+    optional uint64 unit_id = 1;
+    optional int64 gun_id = 2;
+}
+
+message WeaponInfo {
+    optional int64 gun_id = 1;
+    optional int64 bullet_nun = 2; //当前弹夹里的子弹数量
+    optional int64 clip_num = 3; //所有备用子弹数量
+}
+
+//同步枪械信息
+message SC_SyncGunInfo {
+    optional uint64 unit_id = 1;
+    repeated WeaponInfo infos = 2;
+    optional bool is_cover = 3; //是否是正个列表，true的话就覆盖掉现有的
+}
+
+message CS_ShiftGun {
+    optional uint64 unit_id = 1;
+    optional int64 gun_id = 2;
+}
+
+message SC_ShiftGun {
+    optional uint64 unit_id = 1;
+    optional int64 gun_id = 2;
+}
+
+message CS_StopMove {
+    optional uint64 unit_id = 1;
+    optional uint64 num = 10;
+}
+
+//重启关卡
+message CS_StageRestart {
+}
+
+//重启关卡
+message SC_StageRestart {
+    optional int32 placeholder = 1; //占坑
+}
+
+//关卡阶段
+enum StagePhase {
+    OccupyCenter = 1;    //占据中心建组
+    CollectResource = 2; //采集资源
+    ProtectCenter = 3;   //守护雅典娜
+}
+
+//关卡阶段倒计时
+message SC_StagePhaseTiming {
+    optional StagePhase current_phase = 1; //当前阶段
+    optional int64 timing_ = 2; //距离当前阶段结束时间（毫秒）
+}
+
+//尸潮来袭倒计时
+message SC_StageMonsterComingTiming {
+    optional int64 timing_ = 1; //下一次尸潮来袭倒计时（毫秒）
+}
+
+message BuffInfo {
+    optional uint64 unit_id = 1; //增加buff的单位
+    optional uint64 from_unit_id = 2; //增加buff的单位
+    optional int64 buff_id = 3; //配置表id
+    optional int64 level = 4; //预留
+    optional int64 duration = 5; //buff剩余持续时间
+}
+
+//加buff
+message SC_AddBuff {
+    repeated BuffInfo buff_infos = 1;
+}
+
+//删除buff
+message SC_DelBuff {
+    optional uint64 unit_id = 1;
+    repeated int64 buff_ids = 2; //配置表id
+}
+
+//增加法术场
+message SC_AddMagicField {
+    optional uint64 id = 1;
+    optional uint64 data_id = 2; //surface 表id
+    optional Pos3D pos = 3;
+}
+
+//删除法术场
+message SC_DelMagicField {
+    optional uint64 id = 1;
+}
+
+//服务器通知技能打断
+message SC_UnitInterruptSkill {
+    optional uint64 unit_id = 1;
+    optional int64 skill_id = 2;
+}
+
+message SC_Tips {
+    optional string tip = 1;
+}
+
+//同步所有道具数量
+message SC_SyncAllItems {
+    repeated int64 item_id = 1;
+    repeated int64 num = 2;
+}
+
+//获取经验
+message SC_GetExp {
+    optional uint64 exp = 1; //总经验
+    optional uint64 level = 2;
+}
+
+//（三选一）获取能力
+message SC_GetAbility {
+    repeated uint64 ids = 1;
+    optional uint32 level = 2;
+}
+
+message CS_PickAbility {
+    optional uint64 unit_id = 1;
+    optional uint32 level = 2; //选择哪个等级的能力
+    optional int64 idx = 3; //能力下标
+}
+
+//射击移动
+message CS_ShotMove {
+    optional uint64 unit_id = 1;
+    optional uint32 status = 2; // 1 开始射击 2 停止射击
+}
+
+message Task {
+    optional int64 task_id = 1;
+    optional uint32 value = 2; //当前值，用于需要完成多次的任务类型
+    optional bool finished = 3; //任务是否完成
+}
+//同步任务信息，用于任务信息变更，比如value值变化
+message SC_SyncTask {
+    repeated Task tasks = 1;
+}
+
+//请求当前任务列表
+message CS_TaskList {
+}
+message SC_TaskList {
+    repeated Task tasks = 1;
+}
+
+//怪物来袭通知
+message SC_MonsterWaveComing {
+    optional int32 idx = 1; //第几波怪，从1开始
+    optional bool is_boos = 2; //是否是boss
+}
+
+//user_id预留功能，后续能断线重连，客户端目前先随机生成一个吧
+//room_name预留功能，目前先填空，多人可以进入相同scene_id的不同场景。
+message CS_EnterScene {
+    optional int64 scene_id = 1; //bigmap_main.bigmap_id
+    optional uint64 user_id = 2; //玩家id
+    optional string room_name = 3; //房间名称，预留
+    optional string user_name = 4; //玩家昵称
+}
+
+message SC_EnterScene {
+    optional string ret = 1; //为空则ok，不为空说明有错误。
+}
+
+//技能在指定位置释放了，比如手雷在pos点炸了
+message CS_SkillCastOnPos {
+    optional int64 skill_id = 1;
+    optional Pos3D pos = 2;
+}
+
+message SC_MonsterWakeUp {
+	optional uint64 unit_id = 1; //惊醒的怪物
+	optional uint64 target_id = 2; //引起惊醒的hero
+    optional Pos3D pos = 3; //引发惊醒的位置，比如声音的位置
+}
+
+//发射子弹
+message SC_CastBullet {
+    optional uint64 unit_id = 1; //发射子弹的单位
+    optional Pos3D ori = 2; //方向
+    optional int64 skill_id = 3; //技能
+}

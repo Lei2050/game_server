@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+message GmAddResource {
+    optional uint64 uid = 1;
+    optional string res = 2;
+}
+
+message GmUpdateGameRouter {
+    repeated GameRouterInfo areas = 1;
+}
+
+message GameRouterInfo {
+    optional uint32 area_id = 1;
+    repeated uint32 bus_id = 2;
+}

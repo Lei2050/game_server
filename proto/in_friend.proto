@@ -1,0 +1,53 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package="am/protocol/in";
+
+
+//好友查找
+message FriendSearchReq {
+    optional string name = 1;
+}
+
+message FriendSearchRes {
+    optional uint64 player_id = 1;
+}
+
+//好友检查
+message FriendCheck {
+    optional uint64 player_id = 1; //添加的人
+    optional uint64 add_uid = 2; //被添加的人
+    optional uint32 add_type = 3; //添加类型 好友请求 或者 好友
+}
+
+message FriendCheckRes {
+    optional uint64 add_uid = 1; //被添加的人
+    optional uint64 player_id = 2; //添加的人
+    optional uint32 ret = 3; //检查结果 为 0表示检查通过
+    optional uint32 add_type = 4; //添加类型
+}
+
+//好友推荐
+message G2R_FriendRecommend {
+    optional uint64 uid = 1; //获取好友推荐的玩家
+    optional string language = 2; //设备语言
+    optional string arena = 3; //下载地区相同
+    optional uint32 level = 4; //玩家等级
+}
+
+message R2G_FriendRecommend {
+    optional uint64 uid = 1; //获取好友推荐的玩家
+    repeated FriendRecommendInfo friends = 2;
+}
+
+message FriendRecommendInfo {
+    optional uint64 uid = 1;
+    optional uint32 online = 2; //是否在线 1 在线 0 不在线
+    optional uint32 language = 3; //语言是否相同 1 相同 0 不同
+    optional uint32 arena = 4; //下载地区是否相同
+    optional uint32 level_interval = 5; //等级差
+    optional int64 offline_time = 6; //离线时间
+}
+
+

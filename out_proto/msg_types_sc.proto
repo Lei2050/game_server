@@ -1,0 +1,128 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+import "login.proto";
+import "hero.proto";
+import "bag.proto";
+import "err_response.proto";
+import "draw.proto";
+import "statistics.proto";
+import "rank.proto";
+import "mail.proto";
+import "shop.proto";
+import "limit.proto";
+import "tower.proto";
+import "battle.proto";
+import "guild.proto";
+import "friend.proto";
+
+// 所有服务器->客户端的消息类型
+// (100+模块号)*1000 + 递增号
+// 比如下面登陆，登陆模块号为1
+// 协议号范围 (100000, 299999]，如果超出这个范围，请报风险 
+// 注意：在客户端，1**开头的是C#端协议，2**开头的是Lua端协议。
+message SCMessage {
+    //oneof one_of {
+
+    //登陆相关 101
+    optional SC_Login sc_login = 101001;
+    optional SC_Create sc_create = 101002;
+    optional SC_Kickoff sc_kickoff = 101003;
+    optional SC_Gm sc_gm = 101004;
+    optional SC_Ready sc_ready = 101005;
+
+    //角色系统 102
+    optional SC_HeroDraw sc_hero_draw = 102001;
+    optional SC_HeroLevelUp sc_hero_level_up = 102002;
+    optional SC_HeroStarUp sc_hero_star_up = 102003;
+    optional SC_HeroList sc_hero_list = 102004;
+
+    //背包道具相关 103
+    optional SC_BagList sc_bag_list = 103001;
+    optional SC_ExpandBag sc_expand_bag = 103002;
+    optional SC_UseSinglePickBox sc_use_singlepickbox = 103003;
+    optional SC_SaleItem sc_sale_item = 1030004;
+    optional SC_ResourceNotify sc_resource_notify = 103005;
+    optional SC_ResourceList sc_resource_list = 103006;
+
+    //错误返回
+    optional SC_ErrResponse sc_err_response = 103020;
+
+    // 玩家次数、限次记录
+    optional SC_StatisticsList sc_statistics_list = 103030;
+    optional SC_LimitList sc_limit_list = 103031;
+
+    //抽卡相关 104
+    optional SC_DrawReward sc_draw_reward = 104002;
+
+    //排行榜 105
+    optional SC_GetRankList sc_rank_list = 105001;
+
+    //邮件系统 106
+    optional SC_GetMailList sc_mail_list = 106001;
+    //optional SC_ReadMail sc_read_mail = 106002;
+    //optional SC_ReceiveMail sc_receive_mail = 106003;
+    //optional SC_DeleteMail sc_delete_mail = 106004;
+    optional SC_MailNotify sc_mail_notify = 106002;
+
+    //商店系统 107
+    optional SC_GetShop sc_get_shop = 107001;
+
+    //爬塔系统 108
+    optional SC_GetTowerInfo sc_tower_info = 108001;
+    optional SC_TowerFight sc_tower_fight = 108002;
+
+    //公会系统 109
+     optional SC_GetGuildList sc_get_guildlist = 109008;
+
+     //好友系统 110
+     optional SC_GetFriendList sc_get_friendlist = 110001;
+     optional SC_FriendRecommend sc_friend_recommend = 110002;
+     optional SC_FriendSearch sc_friend_search = 110003;
+
+
+
+    //战斗系统
+    optional SC_BattleHeartBeat sc_battle_heart_beat = 150000;
+    optional SC_EnterStage sc_enter_stage = 150001;
+    optional SC_BattleLogin sc_battle_login = 150002;
+    optional SC_BattleReady sc_battle_ready = 150003;
+    optional SC_BattleGm sc_battle_gm = 150004;
+    optional SC_Move sc_move = 150005;
+    optional SC_AddUnit sc_add_unit = 150006;
+    optional SC_RemoveUnit sc_remove_unit = 150007;
+    optional SC_SyncUnitInfo sc_sync_unit_info = 150008;
+    optional SC_QuickTakeRoom sc_quick_take_room = 150009;
+    optional SC_CollectionResource sc_collection_resource = 150010;
+    optional SC_StateChange sc_state_change = 150011;
+    optional SC_AwardsGet sc_awards_get = 150012;
+    optional SC_MainUnit sc_main_unit = 150013;
+    optional SC_UnitAddItem sc_unit_add_item = 150014;
+    optional SC_UnitSyncItem sc_unit_sync_item = 150015;
+    optional SC_CastSkill sc_cast_skill = 150016;
+    optional SC_SyncDamage sc_sync_damage = 150017;
+    optional SC_SyncGunInfo sc_sync_gun_info = 150019;
+    optional SC_ShiftGun sc_shift_gun = 150020;
+    optional SC_StageRestart sc_stage_restart = 150022;
+    optional SC_StagePhaseTiming sc_stage_phase_timing = 150023;
+    optional SC_StageMonsterComingTiming sc_stage_monster_coming_timing = 150024;
+    optional SC_AddBuff sc_add_buff = 150025;
+    optional SC_DelBuff sc_del_buff = 150026;
+    optional SC_AddMagicField sc_add_magicfield = 150027;
+    optional SC_DelMagicField sc_del_magicfield = 150028;
+    optional SC_UnitInterruptSkill sc_unit_interrupt_skill = 150029;
+    optional SC_Tips sc_tips = 150030;
+    optional SC_SyncAllItems sc_sync_all_items = 150031;
+    optional SC_GetExp sc_get_exp = 150033;
+    optional SC_GetAbility sc_get_ability = 150034;
+    optional SC_TaskList sc_task_list = 150036;
+    optional SC_SyncTask sc_sync_tasks = 150037;
+    optional SC_MonsterWaveComing sc_monster_wave_coming = 150039;
+    optional SC_EnterScene sc_enter_scene = 150040;
+	optional SC_MonsterWakeUp sc_monster_wakeup = 150042;
+	optional SC_CastBullet sc_cast_bullet = 150043;
+
+}

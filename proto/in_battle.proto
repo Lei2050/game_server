@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/in";
+
+message SB_TakeRoom {
+    optional uint32 stage_id = 1;
+    optional uint64 room_id = 2;
+    repeated uint64 uids = 3;
+}
+
+message BS_TakeRoom {
+    optional uint32 stage_id = 1;
+    optional uint64 room_id = 2;
+    repeated uint64 uids = 3;
+    optional string address = 4; //对客户端的监听地址
+    optional bool ok = 5;
+}

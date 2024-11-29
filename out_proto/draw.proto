@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package am.protocol;
+
+option go_package = "am/protocol/out";
+
+message CS_Draw {
+    optional uint32 type = 1; // 1 友情抽卡 or 1 高级抽卡
+    optional uint32 num = 2; // 1 单抽 or  10 十连
+    optional uint32 cost_type = 3; // 1 钻石 , 2 单抽券
+}
+
+// 高级抽卡阶段奖励
+message CS_DrawReward {
+    optional uint32 times = 1;
+}
+
+message SC_DrawReward {
+    optional int32 placeholder = 1; //占坑
+}
+
